@@ -192,25 +192,6 @@ static navigationOptions = ({ navigation }) => {
     };
   };
   
-constructor(props) {
-    super(props);
-    this.state = {
-      branches: [
-        { address_line: 'address 1', id: 1 },
-        { address_line: 'address 2', id: 2 },
-        { address_line: 'address 3', id: 3 },
-        { address_line: 'address 4', id: 4 },
-        { address_line: 'address 5', id: 5 }],
-      selected1: 1
-    };
-  }
-
-  onBranchSelected(value) {
-    this.setState({
-      selectedBranch: value
-    });
-  }
-
 render() {
     return (
       <Container>
@@ -232,6 +213,7 @@ render() {
               />
             </Item>
 
+            <Item>
             <Picker
               mode="dropdown"
               iosHeader="Select your SIM"
@@ -247,6 +229,7 @@ render() {
               <Picker.Item label="7º Semestre" value="key6" />
               <Picker.Item label="8º Semestre" value="key7" />
             </Picker>
+            </Item>
 
             <Button style={ {marginTop: 10} }
               full
