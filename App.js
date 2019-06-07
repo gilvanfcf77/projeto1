@@ -31,17 +31,18 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-import { Container, Content, Header, Form, Input, Item, Button, Label} from 'native-base'
+import { Container, Content, Header, Form, Input, Item, Button, Label, Picker} from 'native-base'
 
 class HomeScreen extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = { 
       email: '',
-      password: '' 
+      password: ''
     };
 
   }
+
 
   loginUser = (email, password) => {
     try{
@@ -174,14 +175,14 @@ static navigationOptions = ({ navigation }) => {
     };
   };
 
-render() {
-    return (
-      <Container>
-        <Text>Cadastro de cliente</Text>
-      
-      </Container>
+render(){
+  return(
+    <Text>Cadastro de cliente</Text>
+
     );
-  }
+
+}
+
 }
 
 class StudentRegistrationScreen extends React.Component {
@@ -190,12 +191,72 @@ static navigationOptions = ({ navigation }) => {
       title: navigation.getParam('otherParam', 'Cadastro de aluno'),
     };
   };
+  
+constructor(props) {
+    super(props);
+    this.state = {
+      branches: [
+        { address_line: 'address 1', id: 1 },
+        { address_line: 'address 2', id: 2 },
+        { address_line: 'address 3', id: 3 },
+        { address_line: 'address 4', id: 4 },
+        { address_line: 'address 5', id: 5 }],
+      selected1: 1
+    };
+  }
+
+  onBranchSelected(value) {
+    this.setState({
+      selectedBranch: value
+    });
+  }
 
 render() {
     return (
       <Container>
-        <Text>Cadastro de aluno</Text>
-      
+        <Content>
+          <Form>
+            <Item floatingLabel>
+              <Label>Nome Completo</Label>
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+              />
+            </Item>
+
+            <Item floatingLabel>
+              <Label>Email</Label>
+              <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+              />
+            </Item>
+
+            <Picker
+              mode="dropdown"
+              iosHeader="Select your SIM"
+              style={{ width: undefined }}
+              selectedValue={"key0"}
+            >
+              <Picker.Item label="1º Semestre" value="key0" />
+              <Picker.Item label="2º Semestre" value="key1" />
+              <Picker.Item label="3º Semestre" value="key2" />
+              <Picker.Item label="4º Semestre" value="key3" />
+              <Picker.Item label="5º Semestre" value="key4" />
+              <Picker.Item label="6º Semestre" value="key5" />
+              <Picker.Item label="7º Semestre" value="key6" />
+              <Picker.Item label="8º Semestre" value="key7" />
+            </Picker>
+
+            <Button style={ {marginTop: 10} }
+              full
+              rounded
+              success
+            >
+            <Text style= {{ color: 'white' }}> Continuar </Text> 
+            </Button>          
+          </Form>
+        </Content>
       </Container>
     );
   }
