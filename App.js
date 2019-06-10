@@ -1,14 +1,22 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as firebase from 'firebase';
+import { Container, Content, Header, Form, Input, Item, Button, Label, Picker} from 'native-base'
+
+/**
+ * - AppSwitchNavigator
+ *    - WelcomeScreen
+ *      - Login Button
+ *      - Sign Up Button
+ *    - AppDrawerNavigator
+ *          - Dashboard - DashboardStackNavigator(needed for header and to change the header based on the                     tab)
+ *            - DashboardTabNavigator
+ *              - Tab 1 - FeedStack
+ *              - Tab 2 - ProfileStack
+ *              - Tab 3 - SettingsStack
+ *            - Any files you don't want to be a part of the Tab Navigator can go here.
+ */
 
 import {
   createSwitchNavigator,
@@ -17,6 +25,9 @@ import {
   createBottomTabNavigator,
   createStackNavigator
 } from 'react-navigation';
+
+import ClientRegistrationScreen from './screens/Client/ClientRegistrationScreen';
+import StudentRegistrationScreen from './screens/Student/StudentRegistrationScreen';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -31,10 +42,15 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-import { Container, Content, Header, Form, Input, Item, Button, Label, Picker} from 'native-base'
+class App extends Component {
+  render() {
+    return <AppContainer />;
+  }
+}
+export default App;
 
-class HomeScreen extends Component<Props> {
-  constructor(props) {
+class WelcomeScreen extends Component {
+    constructor(props) {
     super(props);
     this.state = { 
       email: '',
@@ -168,24 +184,8 @@ render() {
   }
 }
 
-class ClientRegistrationScreen extends React.Component {
-static navigationOptions = ({ navigation }) => {
-    return {
-      title: navigation.getParam('otherParam', 'Cadastro de cliente'),
-    };
-  };
 
-render(){
-  return(
-    <Text>Cadastro de cliente</Text>
-
-    );
-
-}
-
-}
-
-class StudentRegistrationScreen extends React.Component {
+class StudentRegistration2Screen extends React.Component {
 static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('otherParam', 'Cadastro de aluno'),
@@ -197,46 +197,15 @@ render() {
       <Container>
         <Content>
           <Form>
-            <Item floatingLabel>
-              <Label>Nome Completo</Label>
-              <Input
-                autoCorrect={false}
-                autoCapitalize="none"
-              />
-            </Item>
 
-            <Item floatingLabel>
-              <Label>Email</Label>
-              <Input
-                autoCorrect={false}
-                autoCapitalize="none"
-              />
-            </Item>
-
-            <Item>
-            <Picker
-              mode="dropdown"
-              iosHeader="Select your SIM"
-              style={{ width: undefined }}
-              selectedValue={"key0"}
-            >
-              <Picker.Item label="1º Semestre" value="key0" />
-              <Picker.Item label="2º Semestre" value="key1" />
-              <Picker.Item label="3º Semestre" value="key2" />
-              <Picker.Item label="4º Semestre" value="key3" />
-              <Picker.Item label="5º Semestre" value="key4" />
-              <Picker.Item label="6º Semestre" value="key5" />
-              <Picker.Item label="7º Semestre" value="key6" />
-              <Picker.Item label="8º Semestre" value="key7" />
-            </Picker>
-            </Item>
 
             <Button style={ {marginTop: 10} }
               full
               rounded
               success
+              onPress={() => this.props.navigation.navigate('Dashboard2')}
             >
-            <Text style= {{ color: 'white' }}> Continuar </Text> 
+            <Text style= {{ color: 'white' }}> Finalizar cadastro </Text> 
             </Button>          
           </Form>
         </Content>
@@ -245,38 +214,209 @@ render() {
   }
 }
 
+class DashboardScreen1 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>DashboardScreen2</Text>
+      </View>
+    );
+  }
+}
 
+class Profile1 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Perfil</Text>
+      </View>
+    );
+  }
+}
 
-const AppNavigator = createStackNavigator(
+class Projects1 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Projetos</Text>
+      </View>
+    );
+  }
+}
+
+class Idea extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Nova ideia</Text>
+      </View>
+    );
+  }
+}
+
+class VoluntarySearch extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>VoluntarySearch</Text>
+      </View>
+    );
+  }
+}
+
+const DashboardTabNavigator1 = createBottomTabNavigator(
   {
-    Home: HomeScreen,
-    Registration: RegistrationScreen,
-    StudentRegistration: StudentRegistrationScreen,
-    ClientRegistration: ClientRegistrationScreen
-
+    Profile1,
+    Projects1,
+    Idea,
+    VoluntarySearch,
   },
   {
-    initialRouteName: "Home"
+    navigationOptions: ({ navigation }) => {
+      const { routeName } = navigation.state.routes[navigation.state.index];
+      return {
+        headerTitle: routeName
+      };
+    }
+  }
+);
+const DashboardStackNavigator1 = createStackNavigator(
+  {
+    DashboardTabNavigator1: DashboardTabNavigator1
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: (
+          <Icon
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()}
+            name="md-menu"
+            size={30}
+          />
+        )
+      };
+    }
   }
 );
 
-export default createAppContainer(AppNavigator);
+const AppDrawerNavigator1 = createDrawerNavigator({
+  Dashboard1: {
+    screen: DashboardStackNavigator1
+  }
+});
+
+
+class DashboardScreen2 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>DashboardScreen2</Text>
+      </View>
+    );
+  }
+}
+
+class Profile2 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Perfil</Text>
+      </View>
+    );
+  }
+}
+
+class Projects2 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Projetos</Text>
+      </View>
+    );
+  }
+}
+
+class Teams2 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Equipes</Text>
+      </View>
+    );
+  }
+}
+
+class ProjectsSearch2 extends Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Equipes</Text>
+      </View>
+    );
+  }
+}
+
+const DashboardTabNavigator2 = createBottomTabNavigator(
+  {
+    Profile2,
+    Projects2,
+    Teams2,
+    ProjectsSearch2,
+  },
+  {
+    navigationOptions: ({ navigation }) => {
+      const { routeName } = navigation.state.routes[navigation.state.index];
+      return {
+        headerTitle: routeName
+      };
+    }
+  }
+);
+const DashboardStackNavigator2 = createStackNavigator(
+  {
+    DashboardTabNavigator2: DashboardTabNavigator2
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      return {
+        headerLeft: (
+          <Icon
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()}
+            name="md-menu"
+            size={30}
+          />
+        )
+      };
+    }
+  }
+);
+
+const AppDrawerNavigator2 = createDrawerNavigator({
+  Dashboard2: {
+    screen: DashboardStackNavigator2
+  }
+});
+
+
+
+const AppSwitchNavigator = createSwitchNavigator({
+  Welcome: WelcomeScreen,
+  Registration: RegistrationScreen,
+  ClientRegistration: ClientRegistrationScreen,
+  Dashboard1: AppDrawerNavigator1,
+  StudentRegistration: StudentRegistrationScreen,
+  StudentRegistration2: StudentRegistration2Screen,
+  Dashboard2: AppDrawerNavigator2
+});
+
+const AppContainer = createAppContainer(AppSwitchNavigator);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 10
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
